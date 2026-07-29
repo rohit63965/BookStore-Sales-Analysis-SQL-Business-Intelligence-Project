@@ -1,0 +1,173 @@
+USE book_store;
+SELECT * FROM books;
+SELECT * FROM customers;
+SELECT * FROM orders;
+
+-- Basic Queries
+-- 1) Retrieve all books in the "Fiction" genre
+SELECT row_number() OVER() AS Row_num, Title FROM BOOKS WHERE Genre="Fiction";
+-- 2) Find books published after the year 1950
+SELECT row_number() OVER() AS Row_num, Title, Published_Year FROM BOOKS WHERE Published_Year>1950;
+-- 3) List all customers from the Canada
+SELECT row_number() OVER() AS Row_num, Customer_ID, Country FROM customers WHERE Country="Canada";
+-- 4) Show orders placed in November 2023
+SELECT row_number() OVER() AS Row_num, Order_ID, MONTH(Order_Date) FROM orders WHERE MONTH(Order_Date)=11;
+-- 5) Retrieve the total stock of books available
+SELECT SUM(Stock) FROM books;
+-- 6) Find the details of the most expensive book
+SELECT * FROM BOOKS ORDER BY price DESC Limit 8;
+-- 7) Show all customers who ordered the quantity of a books in the range 12 to 18
+SELECT row_number() OVER() AS Row_num, Customer_ID, book_id, Quantity FROM orders WHERE Quantity BETWEEN 4 AND 8;
+-- 8) Retrieve all orders where the total amount exceeds '115.71'
+SELECT row_number() OVER() AS Row_num, Order_ID, Total_Amount FROM orders WHERE Total_Amount>115.71;
+-- 9) Count the number of books in all genres available in the Books table
+SELECT Genre, COUNT(book_id) AS Total_books FROM books GROUP BY Genre;
+-- 10) Find the book with the lowest stock
+SELECT row_number() OVER() AS Row_num, Book_id, Title, Stock FROM books where stock =(SELECT MIN(Stock) from books);
+-- 11) Calculate the total revenue generated from all orders
+SELECT SUM(o.Quantity*b.Price) AS total_revenue
+FROM orders AS o JOIN books AS b
+ON o.book_id=b.book_id;
+
+-- Advance Queries
+-- 1) Retrieve the total number of books sold for each genre
+SELECT row_number() OVER() AS Row_num, b.Genre Genre, COUNT(order_id) Total_orders, SUM(o.quantity) Sold_books 
+FROM orders o LEFT JOIN books b
+ON b.book_id=o.book_id
+GROUP BY Genre;
+-- 2) Find the average price of books in the "Fantasy" genre
+SELECT AVG(Price) average_price FROM books WHERE genre="Fantasy";
+-- 3) List customers who have placed at least 2 orders
+SELECT row_number() OVER() AS Row_num, c.Customer_ID Customer_ID, c.Name Customer_name, COUNT(o.order_id) Total_orders
+FROM customers c LEFT JOIN orders o
+on c.Customer_ID=o.Customer_ID
+GROUP BY c.Customer_ID, c.Name
+HAVING  COUNT(o.order_id)>=2
+ORDER BY Customer_ID;
+-- 4) Find the most frequently ordered book
+SELECT Book_id, COUNT(order_id) most_frequently_ordered_book 
+FROM orders 
+group by BOOK_ID ORDER BY most_frequently_ordered_book DESC LIMIT 7;
+-- 5) Show the top 3 most expensive books of 'Fantasy' Genre 
+SELECT Title, Genre, Price FROM books WHERE genre="Fantasy" ORDER BY price DESC LIMIT 3;
+-- 6) Retrieve the total quantity of books sold by each author
+SELECT row_number() OVER() AS Row_num, b.author, COUNT(o.Order_ID) Total_orders, SUM(o.Quantity) quantity_of_books_sold_by_each_author 
+FROM books b LEFT JOIN orders o
+ON b.book_id=o.book_id
+GROUP BY author ;
+-- 7) List the cities where customers who spent over $30 are located
+SELECT row_number() OVER() AS Row_num, c.Name Name, c.City  cities_where_customers_who_spent_over_30, SUM(o.Total_Amount) Amount
+FROM customers c JOIN orders o
+on c.Customer_ID=o.Customer_ID
+GROUP BY Name, cities_where_customers_who_spent_over_30
+HAVING Amount>30;
+-- 8) Find the customer who spent the most on orders
+SELECT c.Name Name, COUNT(O.ORDER_ID) Total_orders, ROUND(SUM(Total_Amount)) spending
+FROM customers c JOIN orders o
+on c.Customer_ID=o.Customer_ID
+GROUP BY Name
+ORDER BY spending DESC LIMIT 1;
+-- 9) Calculate the stock remaining after fulfilling all order
+SELECT b.book_id Book_id, b.title Title, b.stock Total_stock, 
+COALESCE(SUM(o.Quantity), 0) Total_orders, (b.stock-COALESCE(SUM(o.Quantity), 0)) remaining_stock
+FROM books b LEFT JOIN orders o
+ON b.book_id=o.book_id
+GROUP BY b.book_id, b.title, b.stock 
+ORDER BY b.book_id;
+-- 10) Retrieve customers whose total spending is greater than the average spending of all customers.
+WITH CustomerSpending AS (
+    SELECT Customer_ID,
+        SUM(Total_Amount) AS Total_Spending
+    FROM Orders
+    GROUP BY Customer_ID)
+SELECT *,
+       AVG(Total_Spending) OVER() AS Avg_Spending
+FROM CustomerSpending
+WHERE Total_Spending >
+(SELECT AVG(Total_Spending)
+FROM CustomerSpending);
+-- 11) Find books that have never been ordered.
+SELECT row_number() OVER() AS Row_num, b.Book_ID Book_ID, b.Title Name_of_Book, COUNT(o.Order_ID) Total_orders
+FROM orders o Right JOIN books b
+ON b.book_id=o.book_id
+GROUP BY Book_ID, Name_of_Book
+HAVING Total_orders=0;
+-- 12) Identify customers who have never placed an order.
+SELECT row_number() OVER() AS Sr_No, c.Name Name, c.Customer_ID Customer_ID, COUNT(o.Order_ID) Total_orders
+FROM customers c LEFT JOIN orders o
+on c.Customer_ID=o.Customer_ID
+GROUP BY Customer_ID, Name
+HAVING Total_orders=0;
+-- 13) Calculate the cumulative monthly revenue generated by the bookstore.
+WITH MonthlyRevenue AS (
+    SELECT 
+        MONTH(Order_Date) AS Month,
+        SUM(Total_Amount) AS Monthly_Revenue
+    FROM Orders
+    GROUP BY MONTH(Order_Date))
+SELECT Month, Monthly_Revenue,
+    SUM(Monthly_Revenue) OVER(ORDER BY Month) AS Cumulative_monthly_Revenue
+FROM MonthlyRevenue
+ORDER BY Month;
+-- 14) Find the month with the highest revenue using a CTE.
+WITH month_with_the_highest_revenue AS(
+SELECT month(Order_Date) MONTH, SUM(Total_Amount) AS Monthly_Revenue
+FROM Orders GROUP BY MONTH(Order_Date)
+) SELECT MONTH, Monthly_Revenue
+FROM month_with_the_highest_revenue
+ORDER BY Monthly_Revenue DESC LIMIT 1;
+
+-- Window Functions
+-- 15) Rank books by price within each genre using Window Functions.
+SELECT DENSE_RANK() OVER(PARTITION BY Genre ORDER BY Price) Ranking, Title, Genre, Price FROM books;
+-- 16) Assign a unique row number to books within each genre using Window Functions.
+SELECT row_number() OVER(Partition by Genre) AS Row_num, Title, Genre FROM books;
+-- 17) Find the second most expensive book in each genre using Window Functions.
+WITH A AS (SELECT 
+              DENSE_RANK() OVER(
+                      PARTITION BY Genre 
+                      ORDER BY Price DESC) RANKING,
+			  Title, Genre, Price 
+              FROM books)
+SELECT * FROM A  WHERE RANKING =2;
+-- 18) Display each customer's current order amount along with their previous order amount using Window Functions.
+SELECT Customer_ID, TOTAL_AMOUNT, Order_Date,
+      LAG(TOTAL_AMOUNT) OVER(PARTITION BY Customer_id ORDER BY ORDER_DATE) amount_along_with_their_previous_order
+FROM orders 
+order by customer_id, order_date;
+-- 19) Display each customer's current order amount along with their next order amount using Window Functions.
+SELECT Customer_ID, Order_Date, TOTAL_AMOUNT,
+      LEAD(TOTAL_AMOUNT) OVER(PARTITION BY Customer_id ORDER BY ORDER_DATE) amount_along_with_their_next_order
+FROM orders
+order by customer_id, order_date;
+-- 20) Calculate the running total of bookstore revenue using Window Functions.
+SELECT *, SUM(TOTAL_AMOUNT) OVER(ORDER BY ORDER_DATE) running_total_of_bookstore_revenue FROM orders;
+-- 21) Show each book's price along with the average price of books in the same genre using.
+SELECT Book_ID, Title, Genre, Price, AVG(Price) OVER(PARTITION BY GENRE) average_price_of_books_in_the_same_genre FROM BOOKS;
+-- 22) Calculate each book's percentage contribution to the total bookstore revenue using window functions.
+WITH Book_Revenue AS (
+    SELECT
+        b.Book_ID, b.Title, b.Genre,
+        SUM(o.Quantity * b.Price) AS Book_Revenue
+    FROM Books b
+    JOIN Orders o
+        ON b.Book_ID = o.Book_ID
+    GROUP BY b.Book_ID, b.Title, b.Genre)
+SELECT
+    Book_ID, Title, Genre, Book_Revenue,
+    ROUND(Book_Revenue * 100.0 / SUM(Book_Revenue) OVER(), 2) AS Percentage_Contribution
+FROM Book_Revenue;
+-- 23) Determine the month-over-month revenue growth percentage using Window Functions.
+WITH Monthly_Revenue AS (
+    SELECT
+        MONTH(Order_Date) AS Month,
+        SUM(Total_Amount) AS Revenue
+    FROM Orders
+    GROUP BY MONTH(Order_Date))
+SELECT
+    Month, Revenue,
+    LAG(Revenue) OVER(ORDER BY Month) AS Previous_Month_Revenue,
+    ROUND((Revenue - LAG(Revenue) OVER(ORDER BY Month)) * 100.0 / LAG(Revenue) OVER(ORDER BY Month),2) 
+    AS Month_over_Month_Growth_Percentage
+FROM Monthly_Revenue
+ORDER BY Month;

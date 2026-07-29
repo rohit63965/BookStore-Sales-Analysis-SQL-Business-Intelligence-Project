@@ -1,0 +1,204 @@
+Basic Business Analysis
+1. Analyze Fiction Book Inventory
+-- =====================================================
+-- Business Question 1: Analyze Fiction Book Inventory
+-- Objective: Retrieve all books belonging to the Fiction genre.
+-- =====================================================
+
+2. Identify Modern Publications
+-- =====================================================
+-- Business Question 2: Identify Modern Publications
+-- Objective: Retrieve books published after the year 1950.
+-- =====================================================
+
+3. Analyze Customer Distribution by Country
+-- =====================================================
+-- Business Question 3: Analyze Customer Distribution by Country
+-- Objective: Retrieve all customers located in Canada.
+-- =====================================================
+
+4. Analyze November 2023 Sales
+-- =====================================================
+-- Business Question 4: Analyze November 2023 Sales
+-- Objective: Retrieve all orders placed during November 2023.
+-- =====================================================
+
+5. Evaluate Current Inventory Levels
+-- =====================================================
+-- Business Question 5: Evaluate Current Inventory Levels
+-- Objective: Calculate the total stock available across all books.
+-- =====================================================
+
+6. Identify Premium-Priced Book
+-- =====================================================
+-- Business Question 6: Identify Premium-Priced Book
+-- Objective: Find the most expensive book in the inventory.
+-- =====================================================
+
+7. Identify Bulk Purchase Orders
+-- =====================================================
+-- Business Question 7: Identify Bulk Purchase Orders
+-- Objective: Find customers who purchased more than one copy in a single order.
+-- =====================================================
+
+8. Analyze High-Value Transactions
+-- =====================================================
+-- Business Question 8: Analyze High-Value Transactions
+-- Objective: Retrieve orders exceeding $20 in value.
+-- =====================================================
+9. Analyze Product Category Mix
+-- =====================================================
+-- Business Question 9: Analyze Product Category Mix
+-- Objective: List all available book genres.
+-- =====================================================
+
+10. Detect Low-Stock Inventory
+-- =====================================================
+-- Business Question 10: Detect Low-Stock Inventory
+-- Objective: Identify the book with the lowest stock level.
+-- =====================================================
+
+11. Calculate Total Revenue
+-- =====================================================
+-- Business Question 11: Calculate Total Revenue
+-- Objective: Compute total revenue generated from all sales.
+-- =====================================================
+
+📈 Advanced Business Analysis
+-- =====================================================
+12. Business Question 12: Evaluate Genre-wise Sales Performance
+-- Objective: Calculate total books sold for each genre.
+-- =====================================================
+
+13. Analyze Fantasy Genre Pricing
+-- =====================================================
+-- Business Question 13: Analyze Fantasy Genre Pricing
+-- Objective: Calculate the average selling price of Fantasy books.
+-- =====================================================
+
+14. Identify Repeat Customers
+-- =====================================================
+-- Business Question 14: Identify Repeat Customers
+-- Objective: Find customers who have placed at least two orders.
+-- =====================================================
+
+15. Identify Best-Selling Book
+-- =====================================================
+-- Business Question 15: Identify Best-Selling Book
+-- Objective: Determine the most frequently ordered book.
+-- =====================================================
+
+16. Analyze Premium Fantasy Books
+-- =====================================================
+-- Business Question 16: Analyze Premium Fantasy Books
+-- Objective: Retrieve the top three most expensive Fantasy books.
+-- =====================================================
+
+17. Evaluate Author-wise Sales Performance
+-- =====================================================
+-- Business Question 17: Evaluate Author-wise Sales Performance
+-- Objective: Calculate total quantity sold for each author.
+-- =====================================================
+
+18. Identify High-Spending Customer Locations
+-- =====================================================
+-- Business Question 18: Identify High-Spending Customer Locations
+-- Objective: Find cities where customers spent more than $30.
+-- =====================================================
+
+19. Identify Highest-Value Customer
+-- =====================================================
+-- Business Question 19: Identify Highest-Value Customer
+-- Objective: Determine the customer with the highest total spending.
+-- =====================================================
+
+20. Calculate Remaining Inventory
+-- =====================================================
+-- Business Question 20: Calculate Remaining Inventory
+-- Objective: Calculate stock remaining after fulfilling all customer orders.
+-- =====================================================
+
+21. Identify Above-Average Customers
+-- =====================================================
+-- Business Question 21: Identify Above-Average Customers
+-- Objective: Find customers whose spending exceeds the average customer spending.
+-- =====================================================
+
+22. Detect Unsold Inventory
+-- =====================================================
+-- Business Question 22: Detect Unsold Inventory
+-- Objective: Identify books that have never been purchased.
+-- =====================================================
+
+23. Identify Inactive Customers
+-- =====================================================
+-- Business Question 23: Identify Inactive Customers
+-- Objective: Find customers who have never placed an order.
+-- =====================================================
+
+24. Analyze Monthly Revenue Trend
+-- =====================================================
+-- Business Question 24: Analyze Monthly Revenue Trend
+-- Objective: Calculate cumulative monthly revenue generated by the bookstore.
+-- =====================================================
+
+25. Identify Peak Revenue Month
+-- =====================================================
+-- Business Question 25: Identify Peak Revenue Month
+-- Objective: Determine the month with the highest revenue using a CTE.
+-- =====================================================
+
+📊 Advanced Analytics with Window Functions
+26. Rank Books Within Each Genre
+-- =====================================================
+-- Business Question 26: Rank Books Within Each Genre
+-- Objective: Rank books based on price within each genre.
+-- =====================================================
+
+27. Assign Sequential Book Numbers
+-- =====================================================
+-- Business Question 27: Assign Sequential Book Numbers
+-- Objective: Assign a unique row number to books within each genre.
+-- =====================================================
+
+28. Identify Second Highest-Priced Book
+-- =====================================================
+-- Business Question 28: Identify Second Highest-Priced Book
+-- Objective: Find the second most expensive book in every genre.
+-- =====================================================
+
+29. Compare Current and Previous Customer Purchases
+-- =====================================================
+-- Business Question 29: Compare Current and Previous Customer Purchases
+-- Objective: Display each order amount alongside the customer's previous order.
+-- =====================================================
+
+30. Compare Current and Next Customer Purchases
+-- =====================================================
+-- Business Question 30: Compare Current and Next Customer Purchases
+-- Objective: Display each order amount alongside the customer's next order.
+-- =====================================================
+
+31. Track Cumulative Revenue Growth
+-- =====================================================
+-- Business Question 31: Track Cumulative Revenue Growth
+-- Objective: Calculate the running total of bookstore revenue.
+-- =====================================================
+
+32. Compare Book Price with Genre Average
+-- =====================================================
+-- Business Question 32: Compare Book Price with Genre Average
+-- Objective: Display each book price along with the average price of its genre.
+-- =====================================================
+
+33. Measure Revenue Contribution by Book
+-- =====================================================
+-- Business Question 33: Measure Revenue Contribution by Book
+-- Objective: Calculate each book's percentage contribution to total bookstore revenue.
+-- =====================================================
+
+34. Analyze Month-over-Month Revenue Growth
+-- =====================================================
+-- Business Question 34: Analyze Month-over-Month Revenue Growth
+-- Objective: Calculate the monthly revenue growth percentage using window functions.
+-- =====================================================
